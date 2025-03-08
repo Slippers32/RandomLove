@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Случайные имена</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .name-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .reverse {
+            flex-direction: row-reverse;
+        }
+
+        .image {
+            width: 180px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .name {
+            font-size: 24px;
+            font-weight: bold;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="name-container">
+            <img id="image1" src="placeholder.png" alt="Картинка" class="image">
+            <div class="name" id="name1"></div>
+        </div>
+        <div class="name">+</div>
+        <div class="name-container reverse">
+            <img id="image2" src="placeholder.png" alt="Картинка" class="image">
+            <div class="name" id="name2"></div>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button onclick="forceChangeNames()">Случайный шип</button>
+    </div>
+
+    <script>
+        const names = ["KayoDog", "Kerell22", "Linkara", "DD0v33", "Archpriezt", "Roxan_chan", 
+            "MrJam12259", "Vladislav000", "Gracia3399", "MV_Tina", "EmpVoid", "Granata_ag", "bark0nii", 
+            "KartaTaro", "maxunta", "Bubenchik15", "_LegoNapoleon_", "dushechko", "doyter", 
+            "Hades_Litray", "CuCultist", "Kartory", "Sorites02", "Masya690", "CyberKent2077", "tukvaPie", 
+            "leven13", "leychikarts9176", "LozLost", "Defemar", "Zheki_4_ka", "Slippers_friend"];
+    
+        const images = names.reduce((obj, name) => {
+            obj[name] = `skins/${name.toLowerCase()}.png`;
+            return obj;
+        }, {});
+    
+        function getRandomName() {
+            return names[Math.floor(Math.random() * names.length)];
+        }
+    
+        function saveNames(name1, name2) {
+            const timestamp = Date.now();
+            localStorage.setItem('savedNames', JSON.stringify({ name1, name2, timestamp }));
+        }
+    
+        function loadNames() {
+            const savedData = JSON.parse(localStorage.getItem('savedNames'));
+            if (!savedData) return null;
+            const elapsed = Date.now() - savedData.timestamp;
+            return elapsed < 5 * 60 * 1000 ? savedData : null; // Проверяем, прошло ли 5 минут
+        }
+    
+        function displayNames(name1, name2) {
+            document.getElementById('name1').textContent = name1;
+            document.getElementById('name2').textContent = name2;
+            document.getElementById('image1').src = images[name1] || "placeholder.png";
+            document.getElementById('image2').src = images[name2] || "placeholder.png";
+        }
+    
+        function tryChangeNames() {
+            if (loadNames()) {
+                alert("Имена можно менять только раз в 5 минут!");
+                return;
+            }
+            let name1, name2;
+            do {
+                name1 = getRandomName();
+                name2 = getRandomName();
+            } while (name1 === name2);
+            saveNames(name1, name2);
+            displayNames(name1, name2);
+        }
+    
+        function forceChangeNames() {
+            let name1, name2;
+            do {
+                name1 = getRandomName();
+                name2 = getRandomName();
+            } while (name1 === name2);
+            saveNames(name1, name2);
+            displayNames(name1, name2);
+        }
+    
+        (function init() {
+            const saved = loadNames();
+            if (saved) {
+                displayNames(saved.name1, saved.name2);
+            } else {
+                tryChangeNames();
+            }
+        })();
+    </script>    
+</body>
+</html>
